@@ -33,7 +33,7 @@ def add_handlers(user):
 
         body += 'ID сообщения квестов: '
         match quest_msg:
-            case None: 'Нет ID!\n'
+            case None: body += 'Нет ID!\n'
             case _: body += (str(quest_msg) + '\n')
 
         plan = user.cache.get('plan')
