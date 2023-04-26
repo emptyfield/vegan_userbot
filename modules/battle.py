@@ -25,6 +25,13 @@ def add_handlers(user):
         words = m.text.split(' ')
         choosed_skills = set(words[2::])
 
+        if len(choosed_skills) == 1 and '_' in choosed_skills:
+            if user.cache.get(f'equip_{words[1]}_battle') != None:
+                del user.cache[f'equip_{words[1]}_battle']
+                user.dump_userdata()
+            await m.edit(res_header(c.name, m.text) + f"Скиллы {'для' if words[1] == 'for' else 'после'} битвы убраны")
+            return
+
         diff = choosed_skills - skills
 
         if len(diff) > 0:
