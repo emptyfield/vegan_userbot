@@ -10,11 +10,14 @@ async def battle_job(user):
     current_battle = (current_time + timedelta(hours=1)).hour
 
     if not isinstance(user.cache.get('plan'), list):
-        default = battle_targets['def']
+        default = None
         user.cache['plan'] = [default, default, default]
         user.dump_userdata()
 
     target = user.cache['plan'][battle_time.index(current_battle)]
+
+    if target == None:
+        return
 
     farm_job = user.scheduler.get_job(f'{user.client.name}/vfarm')
     if farm_job != None:
@@ -26,8 +29,6 @@ async def battle_job(user):
         user.state['is_farm_paused'] = False
         farm_pause_lock = True
 
-    await sleep(182)
-
     await user.client.send_message(vegan_id, target)
 
     equip_after = user.cache.get('equip_after_battle')
@@ -36,6 +37,8 @@ async def battle_job(user):
     for skill in equip_after if equip_after != None else []:
         await user.client.send_message(vegan_id, '/off_' + skill)
 
+    await(5)
+
     for skill in equip_for if equip_for != None else []:
         await user.client.send_message(vegan_id, '/use_' + skill)
 
@@ -43,10 +46,12 @@ async def battle_job(user):
         user.state['autopog_started'] = True
         await user.client.send_message(vegan_id, '/c_100')
 
-    await sleep(240)
+    await sleep(420)
 
     for skill in equip_for if equip_for != None else []:
         await user.client.send_message(vegan_id, '/off_' + skill)
+
+    await(5)
 
     for skill in equip_after if equip_after != None else []:
         await user.client.send_message(vegan_id, '/use_' + skill)
