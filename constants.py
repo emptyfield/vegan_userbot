@@ -9,7 +9,7 @@ battle_targets = {
 }
 
 skills = {'ninja', 'inzhener', 'alchemist', 'zombie', 'medic', 'vor', 'protivogaz', 'berserk',
-          'sadist', 'incvizitor', 'shieldgen', 'greedy', 'bicepc', 'goodsleep', 'cherep', 'pyrotech'}
+          'sadist', 'incvizitor', 'shieldgen', 'greedy', 'bicepc', 'goodsleep', 'cherep', 'pyrotech', 'resistant', 'dvuzhil', 'zapas', 'armor'}
 
 battle_time = [6, 14, 22]
 
