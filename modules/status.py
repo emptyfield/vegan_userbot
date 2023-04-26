@@ -17,6 +17,8 @@ def add_handlers(user):
         job = scheduler.get_job(f'{c.name}/vfarm')
         is_paused = user.state.get('is_farm_paused')
 
+        no_orders = '🦗Нет приказов!'
+
         body = 'Автопатруль: '
         match job, is_paused:
             case None, False: body += '⏹Отключен\n'
@@ -40,8 +42,8 @@ def add_handlers(user):
 
         body += 'План на битвы:\n'
         match plan:
-            case list(): body += ('\n'.join([f'   {battle_time[index]}: {plan[index]}' for index in range(len(battle_time))]) + '\n')
-            case _: body += '   Нет приказов!\n'
+            case list(): body += ('\n'.join([f'   {battle_time[index]}: {plan[index] if plan[index] != None else no_orders}' for index in range(len(battle_time))]) + '\n')
+            case _: body += f'   {no_orders}\n'
 
         equip_for_battle = user.cache.get('equip_for_battle')
         equip_after_battle = user.cache.get('equip_after_battle')
@@ -49,11 +51,11 @@ def add_handlers(user):
         body += 'Способности на битвы: '
         match equip_for_battle:
             case list(): body += (', '.join(equip_for_battle) + '\n')
-            case _: body += 'Не установлено!\n'
+            case _: body += f'{no_orders}\n'
 
         body += 'Способности на перемирие: '
         match equip_after_battle:
             case list(): body += (', '.join(equip_after_battle) + '\n')
-            case _: body += 'Не установлено!\n'
+            case _: body += f'{no_orders}\n'
 
         await m.edit(res_header(c.name, m.text) + body)

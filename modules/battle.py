@@ -16,7 +16,7 @@ def add_handlers(user):
 
     job_start_hours = map(lambda hour: (datetime.now().replace(
         hour=int(hour)) - timedelta(hours=1)).hour.__str__(), battle_time)
-    
+
     scheduler.add_job(battle_job, 'cron', [
                       user], id=f'{client.name}/battle', minute='55', hour=','.join(job_start_hours))
 
@@ -43,7 +43,7 @@ def add_handlers(user):
 
         await m.edit(res_header(c.name, m.text) + f"Новые скиллы {'для' if words[1] == 'for' else 'после'} битвы установлены")
 
-    @client.on_message(f_cmd & regex(r'^\+plan \d{1,2} [a-z]+$'))
+    @client.on_message(f_cmd & regex(r'^\+plan \d{1,2} [a-z_]+$'))
     async def plan(c: Client, m: types.Message = None):
         words = m.text.split(' ')
 
@@ -57,7 +57,7 @@ def add_handlers(user):
             error = True
             err_body += 'В этот час нет битвы\n'
 
-        if battle_targets.get(target) == None:
+        if battle_targets.get(target) == None and target != '_':
             error = True
             err_body += 'Такой цели не существует\n'
 
@@ -65,11 +65,11 @@ def add_handlers(user):
             await m.edit(res_header(c.name, m.text) + err_body)
         else:
             if user.cache.get('plan') == None:
-                default = battle_targets['def']
+                default = None
                 user.cache['plan'] = [default, default, default]
 
             user.cache['plan'][battle_time.index(
-                time)] = battle_targets.get(target)
+                time)] = battle_targets.get(target) if target != None else None
             user.dump_userdata()
 
             await m.edit(res_header(c.name, m.text) + 'Цель назначена')
