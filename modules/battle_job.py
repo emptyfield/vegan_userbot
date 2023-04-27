@@ -37,7 +37,7 @@ async def battle_job(user):
     for skill in equip_after if equip_after != None else []:
         await user.client.send_message(vegan_id, '/off_' + skill)
 
-    await(5)
+    await sleep(5)
 
     for skill in equip_for if equip_for != None else []:
         await user.client.send_message(vegan_id, '/use_' + skill)
@@ -51,7 +51,7 @@ async def battle_job(user):
     for skill in equip_for if equip_for != None else []:
         await user.client.send_message(vegan_id, '/off_' + skill)
 
-    await(5)
+    await sleep(5)
 
     for skill in equip_after if equip_after != None else []:
         await user.client.send_message(vegan_id, '/use_' + skill)
