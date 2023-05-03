@@ -2,7 +2,7 @@ from pytz import timezone
 from datetime import datetime, timedelta
 from asyncio import sleep
 
-from constants import battle_time, battle_targets, vegan_id
+from constants import battle_time, battle_targets, vegan_id, items
 
 
 async def battle_job(user):
@@ -31,13 +31,22 @@ async def battle_job(user):
 
     await user.client.send_message(vegan_id, target)
 
+    arm_after = user.cache.get('arm_after_battle')
+    arm_for = user.cache.get('arm_for_battle')
+
     equip_after = user.cache.get('equip_after_battle')
     equip_for = user.cache.get('equip_for_battle')
+
+    if arm_after != None:
+        await user.client.send_message(vegan_id, '/woff_' + arm_after)
 
     for skill in equip_after if equip_after != None else []:
         await user.client.send_message(vegan_id, '/off_' + skill)
 
     await sleep(5)
+
+    if arm_for != None:
+        await user.client.send_message(vegan_id, '/on_' + arm_for)
 
     for skill in equip_for if equip_for != None else []:
         await user.client.send_message(vegan_id, '/use_' + skill)
