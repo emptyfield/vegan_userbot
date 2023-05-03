@@ -40,7 +40,7 @@ async def battle_job(user):
     equip_for = user.cache.get('equip_for_battle')
 
     if arm_after != None:
-        await user.client.send_message(vegan_id, '/woff_' + arm_after)
+        await user.client.send_message(vegan_id, '/woff_' + arm_after[0])
 
     for skill in equip_after if equip_after != None else []:
         await user.client.send_message(vegan_id, '/off_' + skill)
@@ -48,7 +48,7 @@ async def battle_job(user):
     await sleep(5)
 
     if arm_for != None:
-        await user.client.send_message(vegan_id, '/on_' + arm_for)
+        await user.client.send_message(vegan_id, '/on_' + arm_for[0])
 
     for skill in equip_for if equip_for != None else []:
         await user.client.send_message(vegan_id, '/use_' + skill)
@@ -64,15 +64,21 @@ async def battle_job(user):
     await sleep(3)
 
     for item in craft_for if craft_for != None else []:
-        await user.client.send_message(vegan_id, '/take_' + item)
+        await user.client.send_message(vegan_id, '/takeitem_' + item)
     # -------------------------------------
 
     await sleep(300)
+
+    if arm_for != None:
+        await user.client.send_message(vegan_id, '/woff_' + arm_for[0])
 
     for skill in equip_for if equip_for != None else []:
         await user.client.send_message(vegan_id, '/off_' + skill)
 
     await sleep(5)
+
+    if arm_after != None:
+        await user.client.send_message(vegan_id, '/on_' + arm_after[0])
 
     for skill in equip_after if equip_after != None else []:
         await user.client.send_message(vegan_id, '/use_' + skill)
