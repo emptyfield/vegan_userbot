@@ -18,7 +18,7 @@ def add_handlers(user):
         hour=int(hour)) - timedelta(hours=1)).hour.__str__(), battle_time)
 
     scheduler.add_job(battle_job, 'cron', [
-                      user], id=f'{client.name}/battle', minute='55', hour=','.join(job_start_hours))
+                      user], id=f'{client.name}/battle', minute='57', hour=','.join(job_start_hours))
 
     @client.on_message(f_cmd & regex(r'^\+((arm (for|after)( \w+)+)|(craft|equip) (for|after)( [a-z_]+)+)$'))
     async def equip(c: Client, m: types.Message = None):

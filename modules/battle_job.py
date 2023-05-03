@@ -46,7 +46,7 @@ async def battle_job(user):
         user.state['autopog_started'] = True
         await user.client.send_message(vegan_id, '/c_100')
 
-    await sleep(420)
+    await sleep(300)
 
     for skill in equip_for if equip_for != None else []:
         await user.client.send_message(vegan_id, '/off_' + skill)
