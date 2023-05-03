@@ -31,6 +31,8 @@ async def battle_job(user):
 
     await user.client.send_message(vegan_id, target)
 
+    craft_for = user.cache.get('craft_for_battle')
+    
     arm_after = user.cache.get('arm_after_battle')
     arm_for = user.cache.get('arm_for_battle')
 
@@ -54,6 +56,16 @@ async def battle_job(user):
     if user.state.get('autopog_started') == False:
         user.state['autopog_started'] = True
         await user.client.send_message(vegan_id, '/c_100')
+
+    # ----- Item crafting and wearing -----
+    for item in craft_for if craft_for != None else []:
+        await user.client.send_message(vegan_id, '/c_' + str(items[item]))
+
+    await sleep(3)
+
+    for item in craft_for if craft_for != None else []:
+        await user.client.send_message(vegan_id, '/take_' + item)
+    # -------------------------------------
 
     await sleep(300)
 
