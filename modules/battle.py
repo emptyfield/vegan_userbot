@@ -6,7 +6,7 @@ from html import escape
 
 from utils.filters import f_cmd, f_vegan
 from utils.res_header import res_header
-from constants import skills, battle_time, battle_targets
+from constants import skills, items, battle_time, battle_targets
 from .battle_job import battle_job
 
 
@@ -20,28 +20,40 @@ def add_handlers(user):
     scheduler.add_job(battle_job, 'cron', [
                       user], id=f'{client.name}/battle', minute='55', hour=','.join(job_start_hours))
 
-    @client.on_message(f_cmd & regex(r'^\+equip (for|after)( [a-z_]+)+$'))
+    @client.on_message(f_cmd & regex(r'^\+((arm (for|after)( \w+)+)|(craft|equip) (for|after)( [a-z_]+)+)$'))
     async def equip(c: Client, m: types.Message = None):
         words = m.text.split(' ')
-        choosed_skills = set(words[2::])
+        specified_command = words[0][1:]
+        multiple_args = set(words[2:])
 
-        if len(choosed_skills) == 1 and '_' in choosed_skills:
-            if user.cache.get(f'equip_{words[1]}_battle') != None:
-                del user.cache[f'equip_{words[1]}_battle']
+        what_changed_text = None
+        match specified_command:
+            case 'equip': what_changed_text = 'Скиллы'
+            case 'craft': what_changed_text = 'Предметы'
+            case 'arm': what_changed_text = 'Оружие'
+
+        if len(multiple_args) == 1 and '_' in multiple_args:
+            if user.cache.get(f'{specified_command}_{words[1]}_battle') != None:
+                del user.cache[f'{specified_command}_{words[1]}_battle']
                 user.dump_userdata()
-            await m.edit(res_header(c.name, m.text) + f"Скиллы {'для' if words[1] == 'for' else 'после'} битвы убраны")
+
+            await m.edit(res_header(c.name, m.text) + f"{what_changed_text} {'для' if words[1] == 'for' else 'после'} битвы убраны")
             return
 
-        diff = choosed_skills - skills
+        diff = None
+        match specified_command:
+            case 'equip': diff = multiple_args - skills
+            case 'craft': diff = multiple_args - items
 
-        if len(diff) > 0:
-            await m.edit(res_header(c.name, m.text) + "Этих скиллов не существует: " + escape(', '.join(diff)))
+        if diff != None and len(diff) > 0:
+            await m.edit(res_header(c.name, m.text) + f'Этих {what_changed_text[:-1].lower()}ов не существует: ' + escape(', '.join(diff)))
             return
 
-        user.cache[f'equip_{words[1]}_battle'] = [*choosed_skills]
+        user.cache[f'{specified_command}_{words[1]}_battle'] = [*multiple_args]
         user.dump_userdata()
 
-        await m.edit(res_header(c.name, m.text) + f"Новые скиллы {'для' if words[1] == 'for' else 'после'} битвы установлены")
+        await m.edit(res_header(c.name, m.text) + f"Нов{'ое' if specified_command == 'arm' else 'ые'} {what_changed_text.lower()} " +
+                     f"{'для' if words[1] == 'for' else 'после'} битвы установлен{'о'if specified_command == 'arm' else 'ы'}")
 
     @client.on_message(f_cmd & regex(r'^\+plan \d{1,2} [a-z_]+$'))
     async def plan(c: Client, m: types.Message = None):
