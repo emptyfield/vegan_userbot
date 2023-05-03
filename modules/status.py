@@ -45,17 +45,20 @@ def add_handlers(user):
             case list(): body += ('\n'.join([f'   {battle_time[index]}: {plan[index] if plan[index] != None else no_orders}' for index in range(len(battle_time))]) + '\n')
             case _: body += f'   {no_orders}\n'
 
-        equip_for_battle = user.cache.get('equip_for_battle')
-        equip_after_battle = user.cache.get('equip_after_battle')
+        for key, value in {'equip': 'Способности:\n', 'craft': 'Предметы:\n', 'arm': 'Оружие:\n'}.items():
+            body += value
 
-        body += 'Способности на битвы: '
-        match equip_for_battle:
-            case list(): body += (', '.join(equip_for_battle) + '\n')
-            case _: body += f'{no_orders}\n'
+            for_battle = user.cache.get(f'{key}_for_battle')
+            after_battle = user.cache.get(f'{key}_after_battle')
 
-        body += 'Способности на перемирие: '
-        match equip_after_battle:
-            case list(): body += (', '.join(equip_after_battle) + '\n')
-            case _: body += f'{no_orders}\n'
+            body += '   На битву: '
+            match for_battle:
+                case list(): body += (', '.join(for_battle) + '\n')
+                case _: body += f'{no_orders}\n'
+                
+            body += '   На перемирие: '
+            match after_battle:
+                case list(): body += (', '.join(after_battle) + '\n')
+                case _: body += f'{no_orders}\n'
 
         await m.edit(res_header(c.name, m.text) + body)
