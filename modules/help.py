@@ -3,7 +3,7 @@ from pyrogram.filters import regex
 
 from utils.filters import f_cmd
 from utils.res_header import res_header
-from constants import skills, battle_time, battle_targets
+from constants import skills, battle_time, battle_targets, items
 
 
 def add_handlers(user):
@@ -17,8 +17,10 @@ def add_handlers(user):
             await m.edit(res_header(c.name, m.text) + 'Список команд:\n' +
                          '<code>+status</code> - показать текущее состояние\n' +
                          '<code>+farm [pog]</code> - включить или выключить автопатруль\n'
-                         '<code>+equip for|after (skills...)</code> - установить способности для автопереодевания\n' +
                          '<code>+plan (time) (target)</code> - установить цель на автобитву\n' +
+                         '<code>+equip for|after (skills...)</code> - установить способности для автопереодевания к битве\n' +
+                         '<code>+arm for|after (weapon_code)</code> - установить оружие для автопереодевания к битве\n' +
+                         '<code>+craft for (items...)</code> - установить предметы для автоматического создания и взятия на битву'
                          '<code>+chid</code> - показать ID чата, в котором была вызвана команда\n' +
                          '<code>+help [(command)]</code> - показать список команд или показать объяснение команды, если указан параметр command (первое слово команды)')
         else:
@@ -43,6 +45,12 @@ def add_handlers(user):
                         'Квестовые действия в этот период могут помешать правильной работе программы.\n' +\
                         'Автопатруль временно отключается чтобы не мешать подготовке к битве. ' +\
                         'Если автоматическое создание мешков с золотом включено - перед битвой золото по возможности будет упаковано.'
+                case 'craft':
+                    body = '<code>+craft for (items...)</code> - установить предметы, которые будут создаваться и экипироваться перед битвой.\n' +\
+                        'Вместо (items...) через пробел указываются способности. Список способностей (каждая способность копируется по клику):\n' +\
+                        ', '.join(
+                            [f'<code>{item}</code>' for item in items.keys()])
+
                 case _: body = 'Документации по такой команде нет!'
 
             await m.edit(res_header(c.name, m.text) + body)
