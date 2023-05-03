@@ -43,7 +43,7 @@ def add_handlers(user):
         diff = None
         match specified_command:
             case 'equip': diff = multiple_args - skills
-            case 'craft': diff = multiple_args - items
+            case 'craft': diff = multiple_args - items.keys()
 
         if diff != None and len(diff) > 0:
             await m.edit(res_header(c.name, m.text) + f'Этих {what_changed_text[:-1].lower()}ов не существует: ' + escape(', '.join(diff)))
