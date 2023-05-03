@@ -20,7 +20,7 @@ def add_handlers(user):
     scheduler.add_job(battle_job, 'cron', [
                       user], id=f'{client.name}/battle', minute='57', hour=','.join(job_start_hours))
 
-    @client.on_message(f_cmd & regex(r'^\+((arm (for|after)( \w+)+)|(craft|equip) (for|after)( [a-z_]+)+)$'))
+    @client.on_message(f_cmd & regex(r'^\+((arm (for|after) \w+)|(craft|equip) (for|after)( [a-z_]+)+)$'))
     async def equip(c: Client, m: types.Message = None):
         words = m.text.split(' ')
         specified_command = words[0][1:]
