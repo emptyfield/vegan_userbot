@@ -14,6 +14,9 @@ skills = {'ninja', 'inzhener', 'alchemist', 'zombie', 'medic', 'vor', 'protivoga
 items = {'dzet': 105, 'adrenaline': 104, 'hitin': 106, 'flash': 103,
          'shield': 102, 'grenade': 101, 'molotov': 107, 'knife': 108}
 
+melee_weapon_text = {'Топор', 'Тесак', 'Булава', 'Молот', 'Кувалда', 'Факел', 'Короткий меч', 'Нож',
+                     'Шест', 'Бита', 'Сабля', 'Цепь', 'Кастет', 'Копье', 'Полицейская дубинка', 'Стальные когти', 'Кулаки'}
+
 battle_time = [6, 14, 22]
 
 vegan_id = 5505670334
