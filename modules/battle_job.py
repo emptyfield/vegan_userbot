@@ -23,16 +23,23 @@ async def battle_job(user):
     if farm_job != None:
         farm_job.pause()
 
-    farm_pause_lock = False
-    if user.state.get('is_farm_paused') == True:
+    patrol_pause_lock = False
+    rathunt_pause_lock = False
+
+    if user.state['is_farm_paused'] == True:
         # WARNING: it loses the "full energy" event if it appears during the lockout
         user.state['is_farm_paused'] = False
-        farm_pause_lock = True
+        patrol_pause_lock = True
+
+    if user.state['is_rathunt_paused'] == True:
+        # WARNING: it loses the "full energy" event if it appears during the lockout
+        user.state['is_rathunt_paused'] = False
+        rathunt_pause_lock = True
 
     await user.client.send_message(vegan_id, target)
 
     craft_for = user.cache.get('craft_for_battle')
-    
+
     arm_after = user.cache.get('arm_after_battle')
     arm_for = user.cache.get('arm_for_battle')
 
@@ -86,5 +93,8 @@ async def battle_job(user):
     if farm_job != None:
         farm_job.resume()
 
-    if farm_pause_lock == True:
+    if patrol_pause_lock == True:
         user.state['is_farm_paused'] = True
+
+    if rathunt_pause_lock == True:
+        user.state['is_rathunt_paused'] = True
