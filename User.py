@@ -12,7 +12,7 @@ class User:
     def __init__(self, client: Client, scheduler: AsyncIOScheduler) -> None:
         self.client = client
         self.scheduler = scheduler
-        self.state = {'is_farm_paused': False}
+        self.state = {'is_farm_paused': False, 'is_rathunt_paused': False}
 
         with open(f'userdata/{self.client.name}/data.json', 'a+', encoding='utf-8') as f:
             f.seek(0)
