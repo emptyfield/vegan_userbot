@@ -19,7 +19,7 @@ async def battle_job(user):
     if target == None:
         return
 
-    farm_job = user.scheduler.get_job(f'{user.client.name}/vfarm')
+    farm_job = user.scheduler.get_job(f'{user.client.name}/farm')
     if farm_job != None:
         farm_job.pause()
 
