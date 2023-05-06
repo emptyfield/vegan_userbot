@@ -14,16 +14,20 @@ def add_handlers(user):
 
     @client.on_message(f_cmd & regex(r'^\+status$'))
     async def status(c: Client, m: types.Message):
-        job = scheduler.get_job(f'{c.name}/vfarm')
-        is_paused = user.state.get('is_farm_paused')
+        job = scheduler.get_job(f'{c.name}/farm')
+        is_patrol_paused = user.state.get('is_farm_paused')
+        rathunt_handlers = user.state.get('rathunt_handlers')
+        is_rathunt_paused = user.state.get('is_rathunt_paused')
 
         no_orders = '🦗Нет приказов!'
 
-        body = 'Автопатруль: '
-        match job, is_paused:
-            case None, False: body += '⏹Отключен\n'
-            case None, True: body += '⏸Пауза\n'
-            case Job, False: body += '▶️Работает\n'
+        body = 'Автофарм: '
+        match job, is_patrol_paused, rathunt_handlers, is_rathunt_paused:
+            case None, False, None, False: body += '⏹Отключен\n'
+            case None, True, None, False: body += '🥾⏸Патруль на паузе\n'
+            case Job(), False, None, False: body += '🥾▶️Патрулирование\n'
+            case None, False, None, True: body += '🐭⏸Охота на паузе\n'
+            case None, False, list(), False: body += '🐭▶️Охота\n'
             case _: body += '🚫Некорректное состояние. Для устранения перезапустите автопатруль. Сообщите разработчикам о том, каким образом вы получили это сообщение.\n'
 
         body += 'Автопог: '
