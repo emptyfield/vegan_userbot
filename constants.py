@@ -19,4 +19,6 @@ melee_weapon_text = {'Топор', 'Тесак', 'Булава', 'Молот', '
 
 battle_time = [6, 14, 22]
 
+time_for_regen = 25
+
 vegan_id = 5505670334
