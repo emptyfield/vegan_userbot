@@ -29,7 +29,7 @@ async def patrol(c: Client, m: types.Message, user):
             "quest_select?castle_protect", 1)
 
     user.scheduler.add_job(inline_callback, 'interval',
-                           (c, args), id=f'{c.name}/farm', seconds=182)
+                           (c, *args), id=f'{c.name}/farm', seconds=182)
 
     await inline_callback(c, *args)
 
