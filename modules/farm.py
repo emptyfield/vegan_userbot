@@ -85,7 +85,7 @@ def add_handlers(user):
     async def unpause_farm(c: Client, m: types.Message):
         unpause_args = []
         if user.state.get('autopog_started') == False:
-            unpause_args.append['pog']
+            unpause_args.append('pog')
 
         if user.state.get('is_farm_paused') == True:
             user.state['is_farm_paused'] = False
