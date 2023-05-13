@@ -38,6 +38,10 @@ async def patrol(c: Client, m: types.Message, user):
 
 
 async def rathunt(c: Client, m: types.Message, user):
+    c.send_message(vegan_id, '🗺Квесты')
+
+    await sleep(5)
+
     quest_message_id = user.cache.get('quests_msg')
 
     args = (vegan_id, quest_message_id,
